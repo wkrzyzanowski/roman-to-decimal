@@ -1,27 +1,23 @@
-def get_user_input():
-    user_input = input("Provide number: \n")
-    return user_input
-
-
-def validate_decimal_input(user_input):
-    if not user_input.isdigit():
-        print("You passed wrong input. Must be a decimal number. \n")
-        exit(1)
-
-
-def validate_roman_input(user_input):
-    for character in user_input:
-        contains = character.upper() in allowed_roman_chars
-        if not contains:
-            print(f"You passed wrong input. Allowed roman characters are: {allowed_roman_chars}. \n")
-            exit(1)
-
-
-allowed_roman_chars = {"I", "V", "X", "L", "C", "D", "M"}
+from app_utils import *
 
 
 def decimal_to_roman(user_input):
     validate_decimal_input(user_input)
+
+    allowed_numerals = list(roman_characters_map.keys())
+    allowed_numerals.reverse()  # Sort values from high to low
+    user_input_number = int(user_input)
+
+    result = ''
+
+    while user_input_number != 0:
+        for numeral in allowed_numerals:
+            if user_input_number >= numeral:
+                user_input_number = user_input_number - numeral
+                result += str(roman_characters_map.get(numeral))
+                break
+
+    print(f"{user_input} => {result}")
 
 
 def roman_to_decimal(user_input):
@@ -29,16 +25,18 @@ def roman_to_decimal(user_input):
 
 
 def main():
-    option = input("Choose option: \n 1 - Decimal to Roman \n 2 - Roman to Decimal \n")
-    if option == "1":
-        user_input = get_user_input()
-        decimal_to_roman(user_input)
-    elif option == "2":
-        user_input = get_user_input()
-        roman_to_decimal(user_input)
-    else:
-        print("You choose wrong option or passed wrong input. \n")
+    args = parse_app_arguments()
+
+    if args.todecimal is False and args.toroman is False:
+        print("One of either flags are required: [-dec] [--todecimal] and [-rom] [--toroman]. See more with --help.")
         exit(1)
+    elif args.todecimal is True and args.toroman is True:
+        print("Both options: [-dec] [--todecimal] and [-rom] [--toroman] are not allowed. Choose one.")
+        exit(1)
+    elif args.toroman is True:
+        decimal_to_roman(args.input)
+    elif args.todecimal is True:
+        roman_to_decimal(args.input)
 
 
 # Run program
