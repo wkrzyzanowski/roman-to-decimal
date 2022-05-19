@@ -24,11 +24,13 @@ roman_characters_map = {
 
 def parse_app_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-dec', '--todecimal', help='Tells program that conversion will be between ROMAN to DECIMAL',
+    parser.add_argument('-dec', '--todecimal', help='Tells program that conversion will be between ROMAN and DECIMAL',
                         action='store_true')
-    parser.add_argument('-rom', '--toroman', help='Tells program that conversion will be between DECIMAL to ROMAN',
+    parser.add_argument('-rom', '--toroman', help='Tells program that conversion will be between DECIMAL and ROMAN',
                         action='store_true')
-    parser.add_argument('-i', '--input', help="Program input in decimal on roman format.")
+    parser.add_argument('-i', '--input',
+                        help="Program input number. When flag is set to [--toroman] DECIMAL input should be provided, "
+                             "otherwise [--todecimal] ROMAN format is required.")
     args = parser.parse_args()
     return args
 
